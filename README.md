@@ -1,4 +1,5 @@
 <div align="center">
+		Procedural camera shake for Roblox. Built with roblox-ts		
 	<br>
 	<h style="font-size:2em;"><strong>
 <strong/></h>
