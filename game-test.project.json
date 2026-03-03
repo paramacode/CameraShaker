@@ -1,0 +1,34 @@
+{
+	"name": "game-test",
+	"globIgnorePaths": ["**/package.json", "**/tsconfig.json"],
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"CameraShaker": {
+				"$path": "out",
+				"include": {
+					"$path": "include",
+					"node_modules": {
+						"$className": "Folder",
+						"@rbxts": {
+							"$path": "node_modules/@rbxts"
+						}
+					}
+				}
+			}
+		},
+
+		"StarterPlayer": {
+			"$className": "StarterPlayer",
+
+			"StarterPlayerScripts": {
+				"$className": "StarterPlayerScripts",
+
+				"main": {
+					"$path": "scripts/run-test.client.luau"
+				}
+			}
+		}
+	}
+}

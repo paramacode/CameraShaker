@@ -1,0 +1,26 @@
+[package]
+name = "paramacode/camerashaker"
+version = "1.0.0"
+description = ""
+license = "MIT"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+include = [
+  "src/**",
+  "out/**",
+  "LICENSE.txt",
+  "README.md",
+  "wally.toml"
+]
+
+exclude = [
+  "node_modules/**",
+  ".vscode/**",
+  "docs/**",
+  "*.toml",
+  "*.json",
+  "*.tgz"
+]
+
+[dependencies]
