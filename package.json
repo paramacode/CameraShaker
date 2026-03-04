@@ -2,7 +2,7 @@
   "name": "@rbxts/camerashaker",
   "version": "1.0.0",
   "description": "Procedural camera shake for Roblox. Built with roblox-ts.",
-  "main": "out/init.lua",
+  "main": "out/exports.lua",
   "scripts": {
     "build": "rbxtsc",
     "watch": "rbxtsc -w",
@@ -23,9 +23,11 @@
     "url": "https://github.com/paramacode/CameraShaker/issues"
   },
   "homepage": "https://github.com/paramacode/CameraShaker#readme",
-  "types": "out/index.d.ts",
+  "types": "src/index.d.ts",
   "files": [
     "out",
+    "src",
+    "!src/Tests",
     "!**/*.tsbuildinfo"
   ],
   "publishConfig": {
