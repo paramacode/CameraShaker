@@ -1,7 +1,7 @@
 /// <reference types="@rbxts/testez/globals" />
-import { CameraShakeInstance, CameraShakeState } from "../CameraShakerInstance";
-import { CameraShaker } from "../CameraShakerController";
-import * as Presets from "../CameraShakerTemplates";
+import { CameraShakeInstance, CameraShakeState } from "../camera-shake-instance";
+import { CameraShaker } from "../camera-shaker-controller";
+import * as Presets from "../camera-shake-templates";
 
 export = () => {
 	describe("CameraShakeInstance", () => {

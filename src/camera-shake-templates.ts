@@ -1,4 +1,4 @@
-import { CameraShakeInstance } from "./CameraShakerInstance";
+import { CameraShakeInstance } from "./camera-shake-instance";
 
 export const LightImpact = () =>
 	new CameraShakeInstance({

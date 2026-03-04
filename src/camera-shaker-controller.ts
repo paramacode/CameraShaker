@@ -1,5 +1,5 @@
 import { RunService, Workspace } from "@rbxts/services";
-import { CameraShakeInstance, CameraShakeState } from "./CameraShakerInstance";
+import { CameraShakeInstance, CameraShakeState } from "./camera-shake-instance";
 
 export type ShakeCallback = (offset: Vector3, rotation: Vector3, zoom: number) => void;
 
