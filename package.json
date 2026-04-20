@@ -1,5 +1,5 @@
 {
-  "name": "@rbxts/camerashaker",
+  "name": "@rbxts/camera-shaker",
   "version": "1.0.0",
   "description": "Procedural camera shake for Roblox. Built with roblox-ts.",
   "main": "out",

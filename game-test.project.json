@@ -5,7 +5,7 @@
 		"$className": "DataModel",
 		"ReplicatedStorage": {
 			"$className": "ReplicatedStorage",
-			"CameraShaker": {
+			"cameraShaker": {
 				"$path": "out",
 				"include": {
 					"$path": "include",

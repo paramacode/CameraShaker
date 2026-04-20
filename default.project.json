@@ -1,11 +1,11 @@
 {
-	"name": "camerashaker",
+	"name": "camera-shaker",
 	"globIgnorePaths": ["**/package.json", "**/tsconfig.json"],
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
 			"$className": "ReplicatedStorage",
-			"CameraShaker": {
+			"cameraShaker": {
 				"$path": "out",
 				"include": {
 					"$path": "include",

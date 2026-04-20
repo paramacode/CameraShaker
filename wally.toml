@@ -1,5 +1,5 @@
 [package]
-name = "paramacode/camerashaker"
+name = "paramacode/camera-shaker"
 version = "1.0.0"
 description = "Procedural camera shake for Roblox"
 license = "MIT"

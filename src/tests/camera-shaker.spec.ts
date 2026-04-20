@@ -1,7 +1,6 @@
 /// <reference types="@rbxts/testez/globals" />
 import { CameraShakeInstance, CameraShakeState } from "../camera-shake-instance";
 import { CameraShaker } from "../camera-shaker-controller";
-import * as Presets from "../camera-shake-templates";
 
 export = () => {
 	describe("CameraShakeInstance", () => {
@@ -659,60 +658,6 @@ export = () => {
 		});
 	});
 
-	describe("Presets", () => {
-		it("should create valid LightImpact instances", () => {
-			const inst = Presets.LightImpact();
-			expect(inst.magnitude).to.equal(1);
-			expect(inst.roughness).to.equal(7);
-			expect(inst.fadeInDuration).to.equal(0.1);
-			expect(inst.fadeOutDuration).to.equal(0.15);
-		});
-
-		it("should create valid MediumImpact instances", () => {
-			const inst = Presets.MediumImpact();
-			expect(inst.magnitude).to.equal(2);
-			expect(inst.roughness).to.equal(10);
-		});
-
-		it("should create valid StrongImpact instances", () => {
-			const inst = Presets.StrongImpact();
-			expect(inst.magnitude).to.equal(3);
-			expect(inst.roughness).to.equal(14);
-		});
-
-		it("should create valid Explosion instances with zoom", () => {
-			const inst = Presets.Explosion();
-			expect(inst.magnitude).to.equal(4);
-			expect(inst.roughness).to.equal(15);
-			expect(inst.zoomIntensity).to.equal(2);
-		});
-
-		it("should create valid Earthquake instances", () => {
-			const inst = Presets.Earthquake();
-			expect(inst.magnitude).to.equal(1.5);
-			expect(inst.roughness).to.equal(3);
-		});
-
-		it("should create valid Handheld instances", () => {
-			const inst = Presets.Handheld();
-			expect(inst.magnitude).to.equal(0.8);
-			expect(inst.roughness).to.equal(0.4);
-		});
-
-		it("should return unique instances each call (factory pattern)", () => {
-			const a = Presets.LightImpact();
-			const b = Presets.LightImpact();
-			expect(a).to.never.equal(b);
-		});
-
-		it("should all start in Inactive state", () => {
-			const presets = [Presets.LightImpact(), Presets.MediumImpact(), Presets.StrongImpact(), Presets.Explosion(), Presets.Earthquake(), Presets.Handheld()];
-			for (const inst of presets) {
-				expect(inst.state).to.equal(CameraShakeState.Inactive);
-			}
-		});
-	});
-
 	describe("Visual Demo", () => {
 		it("should apply a sequence of real camera shakes", () => {
 			const shaker = new CameraShaker();
@@ -721,7 +666,16 @@ export = () => {
 			shaker.shakeOnce(4, 15, 0.05, 0.5, new Vector3(0.3, 0.3, 0.3), new Vector3(2.5, 2.5, 2.5), 2);
 
 			task.delay(1, () => {
-				const quake = shaker.shakeSustained(Presets.Earthquake());
+				const quake = shaker.shakeSustained(new CameraShakeInstance({
+					magnitude: 2,
+					roughness: 10,
+					fadeInDuration: 0.5,
+					fadeOutDuration: 1,
+					positionInfluence: new Vector3(0.2, 0.2, 0.2),
+					rotationInfluence: new Vector3(1, 1, 1),
+					zoomIntensity: 1,
+					zoomSpeed: 5,
+				}));
 				task.delay(3, () => {
 					quake.startFadeOut(2);
 				});
