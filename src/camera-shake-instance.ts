@@ -46,8 +46,8 @@ export class CameraShakeInstance {
 	public zoomSpeed: number;
 
 	constructor(options: CameraShakeOptions) {
-		assert(options.magnitude >= 0, `CameraShakeInstance: magnitude must be >= 0, got ${options.magnitude}`);
-		assert(options.roughness >= 0, `CameraShakeInstance: roughness must be >= 0, got ${options.roughness}`);
+		assert(options.magnitude >= 0, `[CameraShakeInstance]: magnitude must be >= 0, got ${options.magnitude}`);
+		assert(options.roughness >= 0, `[CameraShakeInstance]: roughness must be >= 0, got ${options.roughness}`);
 
 		const {
 			magnitude,
@@ -61,10 +61,10 @@ export class CameraShakeInstance {
 			deleteOnInactive = true,
 		} = options;
 
-		assert(fadeInDuration >= 0, `CameraShakeInstance: fadeInDuration must be >= 0, got ${fadeInDuration}`);
-		assert(fadeOutDuration >= 0, `CameraShakeInstance: fadeOutDuration must be >= 0, got ${fadeOutDuration}`);
-		assert(zoomIntensity >= 0, `CameraShakeInstance: zoomIntensity must be >= 0, got ${zoomIntensity}`);
-		assert(zoomSpeed > 0, `CameraShakeInstance: zoomSpeed must be > 0, got ${zoomSpeed}`);
+		assert(fadeInDuration >= 0, `[CameraShakeInstance]: fadeInDuration must be >= 0, got ${fadeInDuration}`);
+		assert(fadeOutDuration >= 0, `[CameraShakeInstance]: fadeOutDuration must be >= 0, got ${fadeOutDuration}`);
+		assert(zoomIntensity >= 0, `[CameraShakeInstance]: zoomIntensity must be >= 0, got ${zoomIntensity}`);
+		assert(zoomSpeed > 0, `[CameraShakeInstance]: zoomSpeed must be > 0, got ${zoomSpeed}`);
 
 		this.magnitude = magnitude;
 		this.roughness = roughness;
@@ -83,18 +83,20 @@ export class CameraShakeInstance {
 
 	public startFadeIn(fadeTime?: number) {
 		if (fadeTime !== undefined) {
-			assert(fadeTime >= 0, `CameraShakeInstance: fadeIn time must be >= 0, got ${fadeTime}`);
+			assert(fadeTime >= 0, `[CameraShakeInstance]: fadeIn time must be >= 0, got ${fadeTime}`);
 			this.fadeInDuration = fadeTime;
 		}
+
 		this.state = CameraShakeState.FadingIn;
 		this.sustain = true;
 	}
 
 	public startFadeOut(fadeTime?: number) {
 		if (fadeTime !== undefined) {
-			assert(fadeTime >= 0, `CameraShakeInstance: fadeOut time must be >= 0, got ${fadeTime}`);
+			assert(fadeTime >= 0, `[CameraShakeInstance]: fadeOut time must be >= 0, got ${fadeTime}`);
 			this.fadeOutDuration = fadeTime;
 		}
+		
 		this.state = CameraShakeState.FadingOut;
 		this.sustain = false;
 	}

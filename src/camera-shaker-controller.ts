@@ -4,22 +4,24 @@ import { CameraShakeInstance, CameraShakeState } from "./camera-shake-instance";
 export type ShakeCallback = (offset: Vector3, rotation: Vector3, zoom: number) => void;
 
 export class CameraShaker {
+	private readonly _renderPriority: number;
+	private readonly _bindName: string;
+	private readonly _instances: CameraShakeInstance[] = [];
+
 	private static _nextId = 0;
 
 	private _running = false;
 	private _destroyed = false;
-	private readonly _renderPriority: number;
-	private readonly _bindName: string;
-	private readonly _instances: CameraShakeInstance[] = [];
 	private _callback?: ShakeCallback;
 	private _originalFOV: number;
+	
 
 	constructor(
 		renderPriority: number = Enum.RenderPriority.Camera.Value,
 		callback?: ShakeCallback,
 	) {
 		const camera = Workspace.CurrentCamera;
-		assert(camera, "CameraShaker: Workspace.CurrentCamera not found");
+		assert(camera, "[CameraShaker]: Workspace.CurrentCamera not found");
 
 		this._renderPriority = renderPriority;
 		this._bindName = `CameraShakerPlus_${CameraShaker._nextId++}`;
@@ -28,18 +30,18 @@ export class CameraShaker {
 	}
 
 	public start() {
-		assert(!this._destroyed, "CameraShaker: Cannot start a destroyed shaker");
+		assert(!this._destroyed, "[CameraShaker]: Cannot start a destroyed shaker");
+
 		if (this._running) return;
 		this._running = true;
 
-		RunService.BindToRenderStep(this._bindName, this._renderPriority, (dt) => {
-			this.update(dt);
-		});
+		RunService.BindToRenderStep(this._bindName, this._renderPriority, (deltaTime: number) => this.update(deltaTime));
 	}
 
 	public stop() {
 		if (!this._running) return;
 		this._running = false;
+
 		RunService.UnbindFromRenderStep(this._bindName);
 	}
 
@@ -51,23 +53,26 @@ export class CameraShaker {
 
 	public update(deltaTime: number) {
 		const instances = this._instances;
-		let ox = 0, oy = 0, oz = 0;
-		let rx = 0, ry = 0, rz = 0;
+
+		let offsetX = 0, offsetY = 0, offsetZ = 0;
+		let rotationX = 0, rotationY = 0, rotationZ = 0;
+	
 		let totalZoom = 0;
 		let needsCleanup = false;
 
 		for (const instance of instances) {
 			const [offset, rotation, zoom] = instance.update(deltaTime);
 
-			const posInf = instance.positionInfluence;
-			const rotInf = instance.rotationInfluence;
+			const positionInfluence = instance.positionInfluence;
+			const rotationInfluence = instance.rotationInfluence;
 
-			ox += offset.X * posInf.X;
-			oy += offset.Y * posInf.Y;
-			oz += offset.Z * posInf.Z;
-			rx += rotation.X * rotInf.X;
-			ry += rotation.Y * rotInf.Y;
-			rz += rotation.Z * rotInf.Z;
+			offsetX += offset.X * positionInfluence.X;
+			offsetY += offset.Y * positionInfluence.Y;
+			offsetZ += offset.Z * positionInfluence.Z;
+			rotationX += rotation.X * rotationInfluence.X;
+			rotationY += rotation.Y * rotationInfluence.Y;
+			rotationZ += rotation.Z * rotationInfluence.Z;
+
 			totalZoom += zoom;
 
 			if (instance.state === CameraShakeState.Inactive && instance.deleteOnInactive) {
@@ -77,15 +82,15 @@ export class CameraShaker {
 
 		if (needsCleanup) {
 			for (let i = instances.size() - 1; i >= 0; i--) {
-				const inst = instances[i];
-				if (inst.state === CameraShakeState.Inactive && inst.deleteOnInactive) {
+				const instance = instances[i];
+				if (instance.state === CameraShakeState.Inactive && instance.deleteOnInactive) {
 					instances.unorderedRemove(i);
 				}
 			}
 		}
 
-		const totalOffset = new Vector3(ox, oy, oz);
-		const totalRotation = new Vector3(rx, ry, rz);
+		const totalOffset = new Vector3(offsetX, offsetY, offsetZ);
+		const totalRotation = new Vector3(rotationX, rotationY, rotationZ);
 
 		if (this._callback) {
 			this._callback(totalOffset, totalRotation, totalZoom);
@@ -108,7 +113,7 @@ export class CameraShaker {
 	}
 
 	public shake(instance: CameraShakeInstance): CameraShakeInstance {
-		assert(!this._destroyed, "CameraShaker: Cannot shake on a destroyed shaker");
+		assert(!this._destroyed, "[CameraShaker]: Cannot shake on a destroyed shaker");
 		this._instances.push(instance);
 		return instance;
 	}
@@ -122,11 +127,11 @@ export class CameraShaker {
 		rotationInfluence?: Vector3,
 		zoomIntensity?: number,
 	): CameraShakeInstance {
-		assert(!this._destroyed, "CameraShaker: Cannot shakeOnce on a destroyed shaker");
-		assert(magnitude >= 0, `CameraShaker: magnitude must be >= 0, got ${magnitude}`);
-		assert(roughness >= 0, `CameraShaker: roughness must be >= 0, got ${roughness}`);
-		assert(fadeIn >= 0, `CameraShaker: fadeIn must be >= 0, got ${fadeIn}`);
-		assert(fadeOut >= 0, `CameraShaker: fadeOut must be >= 0, got ${fadeOut}`);
+		assert(!this._destroyed, "[CameraShaker]: Cannot shakeOnce on a destroyed shaker");
+		assert(magnitude >= 0, `[CameraShaker]: magnitude must be >= 0, got ${magnitude}`);
+		assert(roughness >= 0, `[CameraShaker]: roughness must be >= 0, got ${roughness}`);
+		assert(fadeIn >= 0, `[CameraShaker]: fadeIn must be >= 0, got ${fadeIn}`);
+		assert(fadeOut >= 0, `[CameraShaker]: fadeOut must be >= 0, got ${fadeOut}`);
 		const instance = new CameraShakeInstance({
 			magnitude,
 			roughness,
@@ -151,8 +156,10 @@ export class CameraShaker {
 	}
 
 	public shakeSustained(instance: CameraShakeInstance): CameraShakeInstance {
-		assert(!this._destroyed, "CameraShaker: Cannot shakeSustained on a destroyed shaker");
+		assert(!this._destroyed, "[CameraShaker]: Cannot shakeSustained on a destroyed shaker");
+
 		instance.startFadeIn(instance.fadeInDuration);
+		
 		return this.shake(instance);
 	}
 
